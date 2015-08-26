@@ -35,6 +35,8 @@ public class Ch2_2 {
 	private static String getResult(String[] blackScore, String[] whiteScore) {
 		String[] strength = { "highcard", "pair", "twopairs", "3kind",
 				"straight", "flush", "fullhouse", "4kind", "straightflush" };
+		char[] valueOrder = { '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J',
+				'Q', 'K', 'A' };
 		if (Arrays.asList(strength).indexOf(blackScore[0]) > Arrays.asList(
 				strength).indexOf(whiteScore[0])) {
 			return "Black wins.";
@@ -42,13 +44,21 @@ public class Ch2_2 {
 				.asList(strength).indexOf(whiteScore[0])) {
 			return "White wins.";
 		}
-		for (int i = 0; i < blackScore.length; i++) {
-			if (blackScore[i].charAt(0) > whiteScore[i].charAt(0))
+		for (int i = blackScore.length - 1; i > 0; i--) {
+			if (indexOf(valueOrder, blackScore[i].charAt(0)) > indexOf(valueOrder, whiteScore[i].charAt(0)))
 				return "Black wins.";
-			else if (blackScore[i].charAt(0) < whiteScore[i].charAt(0))
+			else if (indexOf(valueOrder, blackScore[i].charAt(0)) < indexOf(valueOrder, whiteScore[i].charAt(0)))
 				return "White wins.";
 		}
 		return "Tie.";
+	}
+	
+	private static int indexOf(char[] array, char elem) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == elem)
+				return i;
+		}
+		return -1;
 	}
 
 	private static String getScore(String[] hand) {
@@ -57,8 +67,11 @@ public class Ch2_2 {
 		boolean sameSuit = true;
 		char highest = hand[0].charAt(0);
 		for (int i = 0; i < hand.length; i++) {
-			map.put(hand[i], Character.getNumericValue(hand[i].charAt(0)));
-			values[i] = hand[0].charAt(0);
+			int count = map.containsKey(Character.toString(hand[i].charAt(0))) ? map
+					.get(Character.toString(hand[i].charAt(0))) : 0;
+			map.put(Character.toString(hand[i].charAt(0)),
+					count + 1);
+			values[i] = hand[i].charAt(0);
 			if (i > 0 && hand[i] != hand[i - 1])
 				sameSuit = false;
 			if (values[i] > highest) {
@@ -68,7 +81,7 @@ public class Ch2_2 {
 		boolean hasConsecutiveValues = true;
 		Arrays.sort(values);
 		for (int i = 0; i < values.length; i++) {
-			if (i > 0 && values[i] != values[i - 1]) {
+			if (i > 0 && values[i] - values[i - 1] != 1) {
 				hasConsecutiveValues = false;
 			}
 		}
