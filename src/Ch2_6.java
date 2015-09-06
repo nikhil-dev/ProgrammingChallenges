@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -66,13 +65,6 @@ public class Ch2_6 {
 			}
 		}
 		return INFINITY;
-	}
-
-	private static String parse(String name) {
-		if (name.charAt(name.length() - 1) == '.') {
-			return name;
-		}
-		return name + ".";
 	}
 	
 	private static Set<Node> getNeighbors (Map<String, List<String>> graph, Node node) {
